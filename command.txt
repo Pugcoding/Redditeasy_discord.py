@@ -1,0 +1,25 @@
+Drop the following command in discord
+
+@bot.tree.command(name="reddit")
+@app_commands.describe(subreddit_opt = "subreddit")
+async def reddit(interaction: discord.Interaction, subreddit_opt: str):
+
+    try:
+        post = redditeasy.Subreddit()
+        postoutput = post.get_post(subreddit=subreddit_opt)
+        if postoutput.nsfw == True and interaction.channel.is_nsfw() == False:
+            await interaction.response.send_message("This channel is not nsfw, please move to an nsfw channel")
+        else:
+            await interaction.response.send_message(postoutput.content)
+    except:
+        while True:
+            try:
+                post = redditeasy.Subreddit()
+                postoutput = post.get_post(subreddit=subreddit_opt)
+                if postoutput.nsfw == True and interaction.channel.is_nsfw() == False:
+                    await interaction.response.send_message("This channel is not nsfw, please move to an nsfw channel")
+                else:
+                    await interaction.response.send_message(postoutput.content)
+                break
+            except:
+                pass
